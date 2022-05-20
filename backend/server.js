@@ -1,7 +1,25 @@
 import express from 'express';
 import data from './data.js';
-//import bcrypt, { hash } from 'bcrypt';
-//import res from 'express/lib/response';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+mongoose.connect(
+  'mongodb://localhost:27017/ourshop',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('successfully connected');
+    }
+  }
+);
+
 const app = express();
 
 app.use(express.json());
@@ -38,7 +56,9 @@ app.use(express.json());
 
 //   }
 // })
-
+app.listen(8080, () => {
+  console.log('on port 8080');
+});
 app.get('/api/products', (req, res) => {
   res.send(data.products);
 });
@@ -50,6 +70,7 @@ app.get('/api/products/slug/:slug', (req, res) => {
     res.status(404).send({ message: 'Product not found' });
   }
 });
+app.get('/api/signinscreen');
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
